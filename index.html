@@ -152,12 +152,12 @@ new Vue({
 		var v = event.target.value;
 		if (v){
 			this.hour_usd_v = v;
-			this.month_usd_v = this.hour_usd_v * (3600 * 24 * 30 )
+			this.month_usd_v = this.hour_usd_v * ( 24 * 30 )
 			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
 			
 			this.hour_satoshi_v = ( v / lastTimeGotPrice.price ) * 100000000;
 			
-			this.month_satoshi_v = this.hour_satoshi_v * (3600 * 24 * 30 );
+			this.month_satoshi_v = this.hour_satoshi_v * ( 24 * 30 );
 			
 			var vs = v / 3600;
 			
@@ -174,13 +174,13 @@ new Vue({
 		if (v){
 		
 			this.month_usd_v = v;
-			this.hour_usd_v = this.month_usd_v / (3600 * 24 * 30 );
+			this.hour_usd_v = this.month_usd_v / ( 24 * 30 );
 			
 			
 			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
 		
 			this.month_satoshi_v = ( v / lastTimeGotPrice.price ) * 100000000;
-			this.hour_satoshi_v = this.month_satoshi_v / (3600 * 24 * 30 );
+			this.hour_satoshi_v = this.month_satoshi_v / ( 24 * 30 );
 			var vs = v / (3600 * 24 * 30 );
 			
 			vs = ( vs / lastTimeGotPrice.price ) * 100000000;
@@ -200,7 +200,7 @@ new Vue({
 			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
 		
 			this.hour_usd_v =  (v * 100000000) / lastTimeGotPrice.price;
-			this.month_usd_v = this.hour_usd_v * (3600 * 24 * 30 );
+			this.month_usd_v = this.hour_usd_v * ( 24 * 30 );
 			var vs = v / 3600;
 			
 			this.res_sat_sec = vs.toFixed(5);
@@ -213,12 +213,12 @@ new Vue({
 		
 		if (v){
 			this.month_satoshi_v = v;
-			this.hour_satoshi_v = this.month_satoshi_v / (3600 * 24 * 30 );
+			this.hour_satoshi_v = this.month_satoshi_v / ( 24 * 30 );
 			
 			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();	
 			
 			this.month_usd_v =  (v * 100000000) / lastTimeGotPrice.price;
-			this.hour_usd_v = this.month_usd_v / (3600 * 24 * 30 );
+			this.hour_usd_v = this.month_usd_v / ( 24 * 30 );
 			
 			var vs = v / (3600 * 24 * 30 );
 			
