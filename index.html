@@ -69,6 +69,20 @@
 			<div class="col-lg-8">
 				<form>
 				  <div class="form-group row">
+					<label for="inputEmail3" class="col-sm-2 col-form-label"></label>
+					<div class="col-sm-5">
+					  <h4>USD</h4>
+					</div>
+					<div class="col-sm-5">
+					 <h4>SATOSHI</h4>
+					</div>
+				</form>
+			</div>
+			</div>
+			<div class="row mb-5">
+			<div class="col-lg-8">
+				<form>
+				  <div class="form-group row">
 					<label for="inputEmail3" class="col-sm-2 col-form-label">Hour</label>
 					<div class="col-sm-5">
 					  <input type="number" class="form-control" id="inputEmail3" @input="hour_usd" :value="hour_usd_v" placeholder="USD">
@@ -166,7 +180,14 @@ new Vue({
 			this.res_sat_sec = vs.toFixed(5);
 		
 		}
-  
+		else{
+		
+			this.hour_usd_v = undefined;
+			this.month_usd_v = undefined;
+			this.hour_satoshi_v = undefined;
+			this.month_satoshi_v= undefined;
+		
+		}
     },
 	
 	month_usd : async function (event) {
@@ -187,6 +208,13 @@ new Vue({
 			
 			this.res_sat_sec = vs.toFixed(5);
 		
+		}else{
+		
+			this.hour_usd_v = undefined;
+			this.month_usd_v = undefined;
+			this.hour_satoshi_v = undefined;
+			this.month_satoshi_v= undefined;
+		
 		}
     },
 	
@@ -204,6 +232,13 @@ new Vue({
 			var vs = v / 3600;
 			
 			this.res_sat_sec = vs.toFixed(5);
+		
+		}else{
+		
+			this.hour_usd_v = undefined;
+			this.month_usd_v = undefined;
+			this.hour_satoshi_v = undefined;
+			this.month_satoshi_v= undefined;
 		
 		}
     },
@@ -223,6 +258,13 @@ new Vue({
 			var vs = v / (3600 * 24 * 30 );
 			
 			this.res_sat_sec = vs.toFixed(5);
+		
+		}else{
+		
+			this.hour_usd_v = undefined;
+			this.month_usd_v = undefined;
+			this.hour_satoshi_v = undefined;
+			this.month_satoshi_v= undefined;
 		
 		}
     }
