@@ -61,39 +61,54 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <div class="starter-template">
-            <h1>Bootstrap starter template</h1>
+        <div id="app" class="starter-template">
+            <h2>Online convertor that convert the hourly and montly income rates into sats/sec</h2>
+			
+			<div class="container">
+			<div class="row mb-5">
+			<div class="col-lg-8">
+				<form>
+				  <div class="form-group row">
+					<label for="inputEmail3" class="col-sm-2 col-form-label">Hour</label>
+					<div class="col-sm-5">
+					  <input type="number" class="form-control" id="inputEmail3" @input="hour_usd" :value="hour_usd_v" placeholder="USD">
+					</div>
+					<div class="col-sm-5">
+					  <input type="number" class="form-control" id="inputEmail4" @input="hour_satoshi" :value="hour_satoshi_v" placeholder="SATOSHI">
+					</div>
+				  </div>
+				  <div class="form-group row">
+					<label for="inputPassword3" class="col-sm-2 col-form-label">Month</label>
+					<div class="col-sm-5">
+					  <input type="number" class="form-control" id="inputPassword3" @input="month_usd" :value="month_usd_v" placeholder="USD">
+					</div>
+					<div class="col-sm-5">
+					  <input type="number" class="form-control" id="inputPassword4" @input="month_satoshi" :value="month_satoshi_v" placeholder="SATOSHI">
+					</div>
+				  </div>
+				</form>
+			</div>
+			</div>
 			
 			
-			<form>
-			  <div class="form-group row">
-				<label for="inputEmail3" class="col-sm-2 col-form-label">Hour</label>
-				<div class="col-sm-5">
-				  <input type="email" class="form-control" id="inputEmail3" placeholder="USD">
-				</div>
-				<div class="col-sm-5">
-				  <input type="email" class="form-control" id="inputEmail3" placeholder="SATOSHI">
-				</div>
-			  </div>
-			  <div class="form-group row">
-				<label for="inputPassword3" class="col-sm-2 col-form-label">Month</label>
-				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="inputPassword3" placeholder="USD">
-				</div>
-				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="inputPassword3" placeholder="SATOSHI">
-				</div>
-			  </div>
-			 
-			
-			  <div class="form-group row">
-				<div class="col-sm-10">
-				  <button type="submit" class="btn btn-primary">Compute</button>
-				</div>
-			  </div>
-			</form>
+			<div class="row" style="margin-top:25px;">
+			<div class="col-lg-8">
+				<form>
+				  <div class="form-group row">
+					<label for="inputEmail3" class="col-sm-4 col-form-label">SATOSHI / seconds </label>
+					<div class="col-sm-5">
+						{{res_sat_sec}}
+					</div>
+				  </div>
+				 
 
-
+			
+				</form>
+			</div>
+			</div>
+			
+			
+			</div>
         </div>
     </div>
     <!-- /.row -->
@@ -101,4 +116,120 @@
 <!-- /.container -->
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+
+var lastTimeGotPrice = { price : undefined , time : undefined};
+async function getPrice(){
+
+	
+
+	var res = await axios.get('https://blockchain.info/ticker');
+	lastTimeGotPrice.price = res.data.USD.last;
+	lastTimeGotPrice.time = new Date().getTime() / 1000;
+	
+	console.log("getttt")
+
+
+}
+
+
+
+new Vue({
+  el: '#app',
+  data: {
+	hour_usd_v:undefined,
+	month_usd_v:undefined,
+	hour_satoshi_v:undefined,
+	month_satoshi_v:undefined,
+    res_sat_sec:''
+  },
+
+  methods: {
+    hour_usd : async function (event) {
+		var v = event.target.value;
+		if (v){
+			this.hour_usd_v = v;
+			this.month_usd_v = this.hour_usd_v * (3600 * 24 * 30 )
+			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
+			
+			this.hour_satoshi_v = ( v / lastTimeGotPrice.price ) * 100000000;
+			
+			this.month_satoshi_v = this.hour_satoshi_v * (3600 * 24 * 30 );
+			
+			var vs = v / 3600;
+			
+			vs = ( vs / lastTimeGotPrice.price ) * 100000000;
+			
+			this.res_sat_sec = vs.toFixed(5);
+		
+		}
+  
+    },
+	
+	month_usd : async function (event) {
+		var v = event.target.value;
+		if (v){
+		
+			this.month_usd_v = v;
+			this.hour_usd_v = this.month_usd_v / (3600 * 24 * 30 );
+			
+			
+			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
+		
+			this.month_satoshi_v = ( v / lastTimeGotPrice.price ) * 100000000;
+			this.hour_satoshi_v = this.month_satoshi_v / (3600 * 24 * 30 );
+			var vs = v / (3600 * 24 * 30 );
+			
+			vs = ( vs / lastTimeGotPrice.price ) * 100000000;
+			
+			this.res_sat_sec = vs.toFixed(5);
+		
+		}
+    },
+	
+	hour_satoshi :async function (event) {
+		var v = event.target.value;
+		if (v){
+		
+			this.hour_satoshi_v = v;
+			this.month_satoshi_v = this.hour_satoshi_v * (3600 * 24 * 30 );
+			
+			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();
+		
+			this.hour_usd_v =  (v * 100000000) / lastTimeGotPrice.price;
+			this.month_usd_v = this.hour_usd_v * (3600 * 24 * 30 );
+			var vs = v / 3600;
+			
+			this.res_sat_sec = vs.toFixed(5);
+		
+		}
+    },
+	
+	month_satoshi :async function (event) {
+		var v = event.target.value;
+		
+		if (v){
+			this.month_satoshi_v = v;
+			this.hour_satoshi_v = this.month_satoshi_v / (3600 * 24 * 30 );
+			
+			if (lastTimeGotPrice.time == undefined || new Date().getTime() / 1000 - lastTimeGotPrice.time >  20 ) await getPrice();	
+			
+			this.month_usd_v =  (v * 100000000) / lastTimeGotPrice.price;
+			this.hour_usd_v = this.month_usd_v / (3600 * 24 * 30 );
+			
+			var vs = v / (3600 * 24 * 30 );
+			
+			this.res_sat_sec = vs.toFixed(5);
+		
+		}
+    }
+  }
+  
+})
+
+
+</script>
 </body>
